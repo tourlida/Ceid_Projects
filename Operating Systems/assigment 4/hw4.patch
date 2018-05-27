@@ -1,0 +1,221 @@
+diff --git a/include/minix/callnr.h b/include/minix/callnr.h
+index 6f145cf..bd09a6b 100644
+--- a/include/minix/callnr.h
++++ b/include/minix/callnr.h
+@@ -65,7 +65,8 @@
+ #define SETGROUPS_O	  66
+ #define GETMCONTEXT       67
+ #define SETMCONTEXT       68
+-
++#define COUNTPROC         69
++#define PROCEXISTS        70
+ /* Posix signal handling. */
+ #define SIGACTION	  71
+ #define SIGSUSPEND	  72
+diff --git a/kernel/system/do_fork.c b/kernel/system/do_fork.c
+index f309270..992e9cd 100644
+--- a/kernel/system/do_fork.c
++++ b/kernel/system/do_fork.c
+@@ -56,7 +56,9 @@ int do_fork(struct proc * caller, message * m_ptr)
+ #if defined(__i386__)
+   old_fpu_save_area_p = rpc->p_seg.fpu_state;
+ #endif
+-  *rpc = *rpp;				/* copy 'proc' struct */
++  *rpc = *rpp;
++ printf("process forked\n");
++/* copy 'proc' struct */
+ #if defined(__i386__)
+   rpc->p_seg.fpu_state = old_fpu_save_area_p;
+   if(proc_used_fpu(rpp))
+diff --git a/servers/pm/Makefile b/servers/pm/Makefile
+index 9065432..9205f8a 100644
+--- a/servers/pm/Makefile
++++ b/servers/pm/Makefile
+@@ -4,7 +4,7 @@
+ PROG=	pm
+ SRCS=	main.c forkexit.c break.c exec.c time.c alarm.c \
+ 	signal.c utility.c table.c getset.c misc.c \
+-	profile.c schedule.c
++	profile.c schedule.c do_procExists.c do_countProc.c
+ 
+ .if ${USE_MCONTEXT} != "no"
+ SRCS+= mcontext.c
+diff --git a/servers/pm/do_countProc.c b/servers/pm/do_countProc.c
+new file mode 100644
+index 0000000..fe5fab8
+--- /dev/null
++++ b/servers/pm/do_countProc.c
+@@ -0,0 +1,10 @@
++#include <stdio.h>
++#include "signal.h"
++#include "pm.h"
++
++int do_countProc()
++{
++
++return procs_in_use;
++
++} 
+diff --git a/servers/pm/do_procExists.c b/servers/pm/do_procExists.c
+new file mode 100644
+index 0000000..f21cb05
+--- /dev/null
++++ b/servers/pm/do_procExists.c
+@@ -0,0 +1,32 @@
++#include <stdio.h>
++#include "pm.h"
++#include "mproc.h"
++
++int do_procExists()
++{
++int id=m_in.m1_i1;
++int flag=0;
++struct mproc *mp;
++for(int i=0;i<NR_PROCS;i++)
++{
++mp=&mproc[i];
++if(mp->mp_pid==id)
++{
++flag=1;
++break;
++}
++}
++
++if(flag==1) return 1;
++else return 0;
++}
++
++
++
++
++
++
++
++
++
++
+diff --git a/servers/pm/forkexit.c b/servers/pm/forkexit.c
+index 6e01f41..b43bef3 100644
+--- a/servers/pm/forkexit.c
++++ b/servers/pm/forkexit.c
+@@ -1,4 +1,5 @@
+-/* This file deals with creating processes (via FORK) and deleting them (via
++/* This file deals with creating processes (via FORK) and deleting them 
++*(via
+  * EXIT/WAIT).  When a process forks, a new slot in the 'mproc' table is
+  * allocated for it, and a copy of the parent's core image is made for the
+  * child.  Then the kernel and file system are informed.  A process is removed
+diff --git a/servers/pm/main.c b/servers/pm/main.c
+index d3c50f2..a8fd133 100644
+--- a/servers/pm/main.c
++++ b/servers/pm/main.c
+@@ -58,10 +58,10 @@ int main()
+ {
+ /* Main routine of the process manager. */
+   int result;
+-
++message m;
++_syscall(PM_PROC_NR,COUNTPROC,&m);
+   /* SEF local startup. */
+   sef_local_startup();
+-
+   /* This is PM's main loop-  get work and do it, forever and forever. */
+   while (TRUE) {
+ 	  int ipc_status;
+@@ -83,7 +83,7 @@ int main()
+ 		  panic("PM endpoint number out of sync with source: %d",
+ 				  			mp->mp_endpoint);
+ 	  }
+-
++      
+ 	/* Drop delayed calls from exiting processes. */
+ 	if (mp->mp_flags & EXITING)
+ 		continue;
+diff --git a/servers/pm/proto.h b/servers/pm/proto.h
+index 00646d3..53ccd25 100644
+--- a/servers/pm/proto.h
++++ b/servers/pm/proto.h
+@@ -56,7 +56,8 @@ int do_getepinfo(void);
+ int do_getepinfo_o(void);
+ int do_svrctl(void);
+ int do_getsetpriority(void);
+-
++int do_procExists(void);
++int do_countProc(void);
+ /* schedule.c */
+ void sched_init(void);
+ int sched_start_user(endpoint_t ep, struct mproc *rmp);
+@@ -66,6 +67,7 @@ int sched_nice(struct mproc *rmp, int nice);
+ int do_sprofile(void);
+ int do_cprofile(void);
+ 
++
+ /* signal.c */
+ int do_kill(void);
+ int do_srv_kill(void);
+@@ -103,3 +105,4 @@ struct mproc *find_proc(pid_t lpid);
+ int nice_to_priority(int nice, unsigned *new_q);
+ int pm_isokendpt(int ep, int *proc);
+ void tell_vfs(struct mproc *rmp, message *m_ptr);
++
+diff --git a/servers/pm/sys_main.c b/servers/pm/sys_main.c
+new file mode 100644
+index 0000000..2373862
+--- /dev/null
++++ b/servers/pm/sys_main.c
+@@ -0,0 +1,15 @@
++#include <lib.h>
++#include <stdio.h>
++#include <stdlib.h>
++int main(int argc,char **argv)
++{
++if(argc<2)
++exit(1);
++int I=atoi(argv[1]);
++message m;
++m.m1_i1;
++
++int val=_syscall(PM_PROC_NR,PROCEXISTS,&m);
++
++
++}
+diff --git a/servers/pm/table.c b/servers/pm/table.c
+index 5051cec..b8b9a4f 100644
+--- a/servers/pm/table.c
++++ b/servers/pm/table.c
+@@ -80,8 +80,8 @@ int (*call_vec[])(void) = {
+ 	do_set, 	/* 66 = setgroups */
+ 	do_getmcontext,	/* 67 = getmcontext */
+ 	do_setmcontext,	/* 68 = setmcontext */
+-	no_sys,		/* 69 = unused	*/
+-	no_sys,		/* 70 = unused	*/
++	do_countProc,	/* 69 = do_countProc*/
++	do_procExists,  /* 70 =do_procExists	*/
+ 	do_sigaction,	/* 71 = sigaction   */
+ 	do_sigsuspend,	/* 72 = sigsuspend  */
+ 	do_sigpending,	/* 73 = sigpending  */
+diff --git a/servers/vfs/protect.c b/servers/vfs/protect.c
+index 70a4536..554d73d 100644
+--- a/servers/vfs/protect.c
++++ b/servers/vfs/protect.c
+@@ -78,9 +78,10 @@ int do_chmod()
+ 	 * group */
+ 	if (fp->fp_effuid != SU_UID && vp->v_gid != fp->fp_effgid)
+ 		new_mode &= ~I_SET_GID_BIT;
+-
+ 	r = req_chmod(vp->v_fs_e, vp->v_inode_nr, new_mode, &result_mode);
+-	if (r == OK)
++    printf("chmod: %s %o\n",fullpath,new_mode);
++	
++  if (r == OK)
+ 		vp->v_mode = result_mode;
+   }
+ 
+@@ -90,7 +91,6 @@ int do_chmod()
+   } else {	/* FCHMOD */
+ 	unlock_filp(flp);
+   }
+-
+   put_vnode(vp);
+   return(r);
+ }

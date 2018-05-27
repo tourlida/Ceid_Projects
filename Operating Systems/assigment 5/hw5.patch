@@ -1,0 +1,108 @@
+diff --git a/include/minix/callnr.h b/include/minix/callnr.h
+index 6f145cf..b5cff18 100644
+--- a/include/minix/callnr.h
++++ b/include/minix/callnr.h
+@@ -103,6 +103,7 @@
+ #define GETPROCNR	104	/* to PM */
+ #define ISSETUGID	106	/* to PM: ask if process is tainted */
+ #define GETEPINFO_O	107	/* to PM: get pid/uid/gid of an endpoint */
++#define MYCALL          108     /* MYCALL*/
+ #define SRV_KILL  	111	/* to PM: special kill call for RS */
+ 
+ #define GCOV_FLUSH	112	/* flush gcov data from server to gcov files */
+diff --git a/servers/vfs/Makefile b/servers/vfs/Makefile
+index b3a2031..ee5f823 100644
+--- a/servers/vfs/Makefile
++++ b/servers/vfs/Makefile
+@@ -7,7 +7,7 @@ SRCS=	main.c open.c read.c write.c pipe.c dmap.c \
+ 	filedes.c stadir.c protect.c time.c \
+ 	lock.c misc.c utility.c select.c table.c \
+ 	vnode.c vmnt.c request.c \
+-	tll.c comm.c worker.c coredump.c
++	tll.c comm.c worker.c coredump.c mycall.c
+ 
+ .if ${MKCOVERAGE} != "no"
+ SRCS+=  gcov.c
+diff --git a/servers/vfs/mycall.c b/servers/vfs/mycall.c
+new file mode 100644
+index 0000000..33c392d
+--- /dev/null
++++ b/servers/vfs/mycall.c
+@@ -0,0 +1,51 @@
++#include "fs.h"
++#include <sys/stat.h>
++#include <sys/statfs.h>
++#include <minix/com.h>
++#include <minix/u64.h>
++#include <string.h>
++#include "file.h"
++#include "fproc.h"
++#include "path.h"
++#include "param.h"
++#include <minix/vfsif.h>
++#include <minix/callnr.h>
++#include "vnode.h"
++#include "vmnt.h"
++
++int do_mycall()
++{
++struct vnode *vp;
++struct vmnt *vmp;
++char fullpath[PATH_MAX];
++struct lookup resolve;
++vir_bytes vname1;
++size_t vname1_length;
++vname1=(vir_bytes)job_m_in.name1;
++vname1_length=(size_t)job_m_in.name1_length;
++lookup_init(&resolve,fullpath,PATH_NOFLAGS,&vmp,&vp);
++resolve.l_vmnt_lock=VMNT_READ;
++resolve.l_vnode_lock=VNODE_READ;
++
++if(fetch_name(vname1,vname1_length,fullpath)!=OK)
++{
++printf("inode:-\n");
++return (0);
++}
++
++if((vp=eat_path(&resolve,fp))==NULL)
++{
++printf("inode:-\n");
++return(0);
++}else
++{
++printf("inode:%d\n",vp->v_inode_nr);
++return (0);
++}
++unlock_vnode(vp);
++unlock_vmnt(vmp);
++put_vnode(vp);
++
++
++
++}
+diff --git a/servers/vfs/proto.h b/servers/vfs/proto.h
+index b98d742..4bc35d5 100644
+--- a/servers/vfs/proto.h
++++ b/servers/vfs/proto.h
+@@ -276,7 +276,7 @@ int do_statvfs(void);
+ int do_fstatvfs(void);
+ int do_rdlink(void);
+ int do_lstat(void);
+-
++int do_mycall(void);
+ /* time.c */
+ int do_utime(void);
+ 
+diff --git a/servers/vfs/table.c b/servers/vfs/table.c
+index 8371e34..bdb0910 100644
+--- a/servers/vfs/table.c
++++ b/servers/vfs/table.c
+@@ -123,7 +123,7 @@ int (*call_vec[])(void) = {
+ 	no_sys,		/* 105 = unused */
+ 	no_sys,		/* 106 = unused */
+ 	no_sys,		/* 107 = (getepinfo) */
+-	no_sys,		/* 108 = unused */
++	do_mycall,      /* 108 = mycall */
+ 	no_sys,		/* 109 = unused */
+ 	no_sys,		/* 110 = unused */
+ 	no_sys,		/* 111 = (srv_kill) */
