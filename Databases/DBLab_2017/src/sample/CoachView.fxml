@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="632.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.coachController">
+   <left>
+      <TableView fx:id="gameTable" onMouseClicked="#gamePushed" onSort="#gamePushed" prefHeight="312.0" prefWidth="325.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="dateCol" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="opponentCol" prefWidth="91.0" text="Team 1" />
+            <TableColumn fx:id="teamBCol" prefWidth="75.0" text="Team 2" />
+            <TableColumn fx:id="stadiumCol" prefWidth="82.0" text="Stadium" />
+        </columns>
+      </TableView>
+   </left>
+   <right>
+      <TableView fx:id="playerTable" onMouseClicked="#playerPushed" onSort="#playerPushed" prefHeight="294.0" prefWidth="221.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="nameCol" prefWidth="110.0" text="Name" />
+          <TableColumn fx:id="lastnameCol" prefWidth="135.0" text="Lastname" />
+        </columns>
+      </TableView>
+   </right>
+   <center>
+      <VBox spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="f1" layoutX="10.0" layoutY="10.0" prefHeight="20.0" prefWidth="80.0" />
+            <Label fx:id="f2" layoutX="10.0" layoutY="30.0" prefHeight="20.0" prefWidth="80.0" />
+            <Label fx:id="f3" layoutX="10.0" layoutY="50.0" prefHeight="20.0" prefWidth="80.0" />
+            <Label fx:id="f4" layoutX="10.0" layoutY="70.0" prefHeight="20.0" prefWidth="80.0" />
+            <Label fx:id="f5" layoutX="10.0" layoutY="85.0" prefHeight="20.0" prefWidth="80.0" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin></VBox>
+   </center>
+   <top>
+      <HBox prefHeight="102.0" prefWidth="627.0" spacing="5.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="5.0" />
+         </BorderPane.margin>
+         <children>
+            <VBox prefHeight="102.0" prefWidth="110.0">
+               <children>
+                  <Label prefHeight="20.0" prefWidth="90.0" text="Total Games" />
+                  <Label layoutX="10.0" layoutY="10.0" prefHeight="20.0" prefWidth="75.0" text="Wins" />
+                  <Label layoutX="10.0" layoutY="30.0" prefHeight="20.0" prefWidth="75.0" text="Losses" />
+                  <Label layoutX="10.0" layoutY="50.0" prefHeight="20.0" prefWidth="84.0" text="Next Games">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="69.0">
+               <children>
+                  <Label fx:id="fgames" prefHeight="20.0" prefWidth="50.0" />
+                  <Label fx:id="fwins" layoutX="10.0" layoutY="10.0" prefHeight="20.0" prefWidth="50.0" />
+                  <Label fx:id="flosses" layoutX="10.0" layoutY="30.0" prefHeight="20.0" prefWidth="50.0" />
+               </children>
+            </VBox>
+            <Button fx:id="statsBtn" mnemonicParsing="false" onAction="#statsButton" prefHeight="25.0" prefWidth="114.0" text="Show Stats">
+               <HBox.margin>
+                  <Insets top="30.0" />
+               </HBox.margin>
+            </Button>
+            <Region prefHeight="102.0" prefWidth="268.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="logOutBtn" mnemonicParsing="false" onAction="#logOut" prefHeight="25.0" prefWidth="96.0" text="Log out">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="50.0" right="10.0" top="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </top>
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="addPBtn" mnemonicParsing="false" onAction="#addTeamPlayer" text="Add Player">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
+</BorderPane>

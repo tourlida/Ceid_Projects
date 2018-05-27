@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.fanController">
+   <left>
+      <TableView fx:id="gamesTable" onMouseClicked="#gamesPushed" prefHeight="310.0" prefWidth="274.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="dateCol" prefWidth="85.0" text="Date" />
+          <TableColumn fx:id="teamACol" prefWidth="93.0" text="Team A" />
+            <TableColumn fx:id="teamBCol" prefWidth="94.0" text="Team B" />
+        </columns>
+      </TableView>
+   </left>
+   <top>
+      <HBox prefHeight="67.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label prefHeight="26.0" prefWidth="71.0" text="Games">
+                     <VBox.margin>
+                        <Insets bottom="15.0" left="20.0" right="10.0" top="25.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="futureBtn" mnemonicParsing="false" onAction="#futureBtnPushed" prefHeight="25.0" prefWidth="65.0" text="Future">
+                     <VBox.margin>
+                        <Insets bottom="5.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="pastBtn" mnemonicParsing="false" onAction="#pastBtnPushed" prefHeight="25.0" prefWidth="65.0" text="Past">
+                     <VBox.margin>
+                        <Insets bottom="10.0" right="10.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox prefHeight="75.0" prefWidth="81.0">
+               <children>
+                  <Label prefHeight="33.0" prefWidth="76.0" text="My Games">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <TableView fx:id="fanGamesTable" onMouseClicked="#fanGamesPushed" prefHeight="91.0" prefWidth="317.0">
+              <columns>
+                <TableColumn fx:id="fanDateCol" prefWidth="150.0" text="Date" />
+                  <TableColumn fx:id="fanStadiumCol" prefWidth="165.0" text="Stadium" />
+              </columns>
+            </TableView>
+         </children>
+      </HBox>
+   </top>
+   <right>
+      <VBox prefHeight="325.0" prefWidth="185.0" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="117.0" prefWidth="185.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="198.0" text="           NEXT GAME" />
+                  <Label fx:id="next_gameDate" prefHeight="31.0" prefWidth="185.0" />
+                  <Label fx:id="next_gameStadium" layoutX="10.0" layoutY="27.0" prefHeight="31.0" prefWidth="185.0" />
+               </children>
+            </VBox>
+            <Label prefHeight="41.0" prefWidth="185.0" text="         Available Seats" />
+            <Label fx:id="Avseats" layoutX="10.0" layoutY="127.0" prefHeight="41.0" prefWidth="185.0" />
+            <Button fx:id="bookBtn" mnemonicParsing="false" onAction="#bookSeat" text="Book Seat">
+               <VBox.margin>
+                  <Insets left="50.0" />
+               </VBox.margin>
+            </Button>
+            <Label fx:id="bookingInfo" prefHeight="25.0" prefWidth="194.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Button fx:id="infoBtn" mnemonicParsing="false" onMouseClicked="#infoBtnPushed" prefHeight="25.0" prefWidth="66.0" text="Info">
+               <VBox.margin>
+                  <Insets left="50.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="logOutBtn" mnemonicParsing="false" onAction="#logOut" onMouseClicked="#logOut" text="Log out">
+               <VBox.margin>
+                  <Insets left="50.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </right>
+   <bottom>
+      <HBox prefHeight="0.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="15.0" prefWidth="223.0" text="      CEID DATABASE LAB 2017" />
+            <Region prefHeight="200.0" prefWidth="200.0" />
+            <Label layoutX="10.0" layoutY="10.0" prefHeight="15.0" prefWidth="223.0" />
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="gameDateLb" prefHeight="25.0" prefWidth="170.0" />
+            <Label fx:id="gameTimeLb" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="170.0" />
+            <Label fx:id="gameStadiumLb" layoutX="10.0" layoutY="35.0" prefHeight="25.0" prefWidth="170.0" />
+            <Label fx:id="teamALb" layoutX="10.0" layoutY="60.0" prefHeight="25.0" prefWidth="170.0" />
+            <Label fx:id="teamBLb" layoutX="10.0" layoutY="85.0" prefHeight="25.0" prefWidth="170.0" />
+            <Label fx:id="gameRefLb" layoutX="10.0" layoutY="110.0" prefHeight="25.0" prefWidth="170.0" />
+            <Label fx:id="gameResultLb" layoutX="10.0" layoutY="160.0" prefHeight="25.0" prefWidth="170.0" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+</BorderPane>

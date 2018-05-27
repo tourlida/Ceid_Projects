@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.refeeController">
+   <left>
+      <TableView fx:id="table" onMouseClicked="#rowPushed" onSort="#rowPushed" prefHeight="331.0" prefWidth="372.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="dateCol" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="grounderCol" prefWidth="75.0" text="Grounder" />
+            <TableColumn fx:id="guestCol" prefWidth="75.0" text="Guest" />
+            <TableColumn fx:id="stadiumCol" prefWidth="75.0" text="Ground" />
+            <TableColumn fx:id="positionCol" prefWidth="75.0" text="Position" />
+        </columns>
+      </TableView>
+   </left>
+   <top>
+      <HBox prefHeight="69.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Region prefHeight="69.0" prefWidth="257.0" />
+            <Button fx:id="logOutBtn" mnemonicParsing="false" onAction="#logOut" prefHeight="41.0" prefWidth="119.0" text="Log out" />
+         </children></HBox>
+   </top>
+   <right>
+      <HBox prefHeight="331.0" prefWidth="228.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="331.0" prefWidth="80.0">
+               <children>
+                  <Label fx:id="datelb" prefHeight="25.0" prefWidth="75.0" text="Date:">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="timelb" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="75.0" text="Time:">
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="groundlb" layoutX="10.0" layoutY="33.0" prefHeight="25.0" prefWidth="75.0" text="Stadium:">
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="positionlb" layoutX="10.0" layoutY="56.0" prefHeight="25.0" prefWidth="75.0" text="Position:">
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="grounderlb" layoutX="10.0" layoutY="79.0" prefHeight="25.0" prefWidth="75.0" text="Grounder:">
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="guestlb" layoutX="10.0" layoutY="102.0" prefHeight="25.0" prefWidth="81.0" text="Guest:">
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox prefHeight="331.0" prefWidth="126.0">
+               <children>
+                  <Label fx:id="fdatelb" prefHeight="25.0" prefWidth="91.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="ftimelb" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="91.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="fgroundlb" layoutX="10.0" layoutY="35.0" prefHeight="25.0" prefWidth="91.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="fpositionlb" layoutX="10.0" layoutY="60.0" prefHeight="25.0" prefWidth="91.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="fgrounderlb" layoutX="10.0" layoutY="85.0" prefHeight="25.0" prefWidth="91.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="fguestlb" layoutX="10.0" layoutY="110.0" prefHeight="25.0" prefWidth="91.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </right>
+</BorderPane>
