@@ -1,0 +1,24 @@
+<!-- Sxolio -->
+<ss:Workbook>
+<ss:Styles>
+<ss:Style ss:ID="s123"></ss:Style>
+<ss:Style ss:ID="s133"></ss:Style>
+</ss:Styles>
+<ss:Worksheet ss:Name="sheet1" ss:Protected="Boolean">
+<ss:Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="1" >
+<ss:Column ss:Hidden="Boolean" ss:Width="25" ss:StyleID="s123" />
+<ss:Column ss:StyleID="s123"/>
+<ss:Row ss:Height="25" ss:Hidden="Boolean" ss:StyleID="s123">
+<ss:Cell>
+<ss:Data ss:Type="Number"> 
+</ss:Data> 
+</ss:Cell>
+<ss:Cell ss:MergeAcross="15" ss:MergeDown="15" ss:StyleID="s123" >
+<ss:Data ss:Type="Number"> string data
+</ss:Data>
+</ss:Cell>
+</ss:Row>
+</ss:Table>
+</ss:Worksheet>
+</ss:Workbook>
+
